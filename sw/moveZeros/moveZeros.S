@@ -37,12 +37,12 @@ main:
     addi    sp, sp, 4
 
     # call function moveZeros
-    la      a0, nums              # load array base address into register a0
-    addi    a1, x0, 8             # load array size = 5 into register a1
+    la      a0, nums                    # load array base address into register a0
+    addi    a1, x0, 8                   # load array size = 5 into register a1
 
-    add     s0, a0, x0            # store a0 to s0
-    add     s1, a1, x0            # store a1 to s1
-    jal     ra, moveZeros         # jump to moveZeros function
+    add     s0, a0, x0                  # store a0 to s0
+    add     s1, a1, x0                  # store a1 to s1
+    jal     ra, moveZeros               # jump to moveZeros function
 
     # return from moveZeros function
     # print the converted array elements
@@ -69,31 +69,35 @@ main:
 
     # return 0 in main function
     addi    a0, x0, 0
-    jr      ra                     # ret
+    jr      ra                          # ret
 
 moveZeros:
     addi    sp, sp, -4
     sw      ra, 0(sp)
-    li      t0, 0                  # next non zero index = 0
-    addi    t1, x0, 0              # i = 0
+    li      t0, 0                       # next non zero index = 0
+    li      t1, 0                       # i = 0
 
 loop:
-    bge     t1, a1, exit           # i >= array_size exit
-    slli    t2, t1, 2              # i * 4
-    add     t2, a0, t2             # array + i*4
-    lw      t4, 0(t2)              # t1 = array[i]
-    beq     t4, x0, next_iter
-    slli    t3, t0, 2              # next_nonzero_index * 4
-    add     t3, t3, a0             # array + next_nonzero_index * 4
-    sw      t4, 0(t3)              # array[next_nonzero_index] = array[i]
-    beq     t0, t1, next_iter_addIndex             #if(next_nonzero_index != i)
-    sw      x0, 0(t2)              # store 0 to array[i]
+    # t0: store the next non zero index to store
+    # t1: detect next array index
+    # t2: the next non zero address
+    # t3: the next array address for detection
+    bge     t1, a1, exit                # if t1 > num size, return to exit
+    slli    t3, t1, 2                   # find the offset word
+    add     t3, a0, t3                  # find the offset address
+    lw      t4, 0(t3)                   # load the word
+    beq     t4, x0, next_iter           # check if the word is 0
+    slli    t2, t0, 2                   # find the offset word
+    add     t2, t2, a0                  # find the offset address
+    sw      t4, 0(t2)                   # store the non zero word
+    beq     t0, t1, next_iter_addIndex  # if both addresses are same, we don't need to store zero
+    sw      x0, 0(t3)                   # if the addresses aren't same, store 0 to array[i]
 
 next_iter_addIndex:
-    addi    t0, t0, 1              # next_nonzero_index++
+    addi    t0, t0, 1                   # next_nonzero_index++
     
 next_iter:
-    addi    t1, t1, 1              # i++
+    addi    t1, t1, 1                   # if the word is zero, add the index by 1
     j       loop
 
 exit:
