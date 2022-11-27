@@ -4,13 +4,13 @@
 
 .data
 nums:
-    .word 0, 1, 2, 3, 4, 5, 6, 7
+    .word 0, 1, 2, 0, 3, 0, 4
 
 origin_array:
-    .string "The original array is :[%d %d %d %d %d %d %d %d]\n"
+    .string "The original array is :[%d %d %d %d %d %d %d]\n"
 
 converted_array:
-    .string "The converted array is :[%d %d %d %d %d %d %d %d]\n"
+    .string "The converted array is :[%d %d %d %d %d %d %d]\n"
 
 .text
 main:
@@ -21,24 +21,20 @@ main:
     sw      s1, 0(sp)
 
     # print the original array elements
-    la      a0, origin_array
-    la      t0, nums
-    lw      a1, 0(t0)
-    lw      a2, 4(t0)
-    lw      a3, 8(t0)
-    lw      a4, 12(t0)
-    lw      a5, 16(t0)
-    lw      a6, 20(t0)
-    lw      a7, 24(t0)
-    lw      t1, 28(t0)
-    addi    sp, sp, -4
-    sw      t1, 0(sp)
-    call    printf
-    addi    sp, sp, 4
+    # la      a0, origin_array
+    # la      t0, nums
+    # lw      a1, 0(t0)
+    # lw      a2, 4(t0)
+    # lw      a3, 8(t0)
+    # lw      a4, 12(t0)
+    # lw      a5, 16(t0)
+    # lw      a6, 20(t0)
+    # lw      a7, 24(t0)
+    # call    printf
 
     # call function moveZeros
     la      a0, nums                    # load array base address into register a0
-    addi    a1, x0, 8                   # load array size = 5 into register a1
+    addi    a1, x0, 7                   # load array size = 7 into register a1
 
     add     s0, a0, x0                  # store a0 to s0
     add     s1, a1, x0                  # store a1 to s1
@@ -46,20 +42,16 @@ main:
 
     # return from moveZeros function
     # print the converted array elements
-    la      a0, converted_array
-    la      t0, nums
-    lw      a1, 0(t0)
-    lw      a2, 4(t0)
-    lw      a3, 8(t0)
-    lw      a4, 12(t0)
-    lw      a5, 16(t0)
-    lw      a6, 20(t0)
-    lw      a7, 24(t0)
-    lw      t1, 28(t0)
-    addi    sp, sp, -4
-    sw      t1, 0(sp)
-    call    printf
-    addi    sp, sp, 4
+    # la      a0, converted_array
+    # la      t0, nums
+    # lw      a1, 0(t0)
+    # lw      a2, 4(t0)
+    # lw      a3, 8(t0)
+    # lw      a4, 12(t0)
+    # lw      a5, 16(t0)
+    # lw      a6, 20(t0)
+    # lw      a7, 24(t0)
+    # call    printf
 
     # pop back the return address and used s registers from stack
     lw      s1, 0(sp)
