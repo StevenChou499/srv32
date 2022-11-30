@@ -40,31 +40,43 @@ strStr:
 
 checkbase:
     lb      t3, 0(t0)       # t3 = *base
-    bne     t3, x0, start
-    lw      ra, 0(sp)
-    addi    sp, sp, 4
-    li      a0, -1
-    ret
+    beq     t3, x0, notfound
 
 start:
     lb      t3, 0(t0)       # t3 = *base
     lb      t4, 0(t1)       # t4 = *tmp
-    beq     t4, x0, notsame
-    bne     t3, t4, notsame
+    beq     t3, t4, startcompare
+    addi    t2, t2, 1       # index++
+    addi    t0, t0, 1       # ++base
+    j       checkbase
+
+startcompare:
+    add     a0, x0, t0      # use a0 register to remember base
+
+traverse:
+    lb      t3, 0(t0)       # t3 = *base
+    lb      t4, 0(t1)       # t4 = *tmp
+    bne     t3, t4, wrong_index
     addi    t0, t0, 1
     addi    t1, t1, 1
-    j       start
-    
-notsame:
+    j       traverse
+
+wrong_index:
     beq     t4, x0, retindex
-    addi    t2, t2, 1       # index++
-    addi    a0, a0, 1       # ++haystack
-    add     t0, x0, a0      # base = ++haystack
-    add     t1, x0, a1      # tmp = needle
+    add     t0, x0, a0      # restore t0 with a0 register
+    add     t1, x0, a1      # restore t1 with a1 register
+    addi    t0, t0, 1
+    addi    t2, t2, 1
     j       checkbase
 
 retindex:
     lw      ra, 0(sp)
     addi    sp, sp, 4
     add     a0, x0, t2
+    ret
+
+notfound:
+    lw      ra, 0(sp)
+    addi    sp, sp, 4
+    li      a0, -1
     ret
