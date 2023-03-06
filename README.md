@@ -7,6 +7,10 @@ I wrote this code to understand the RV32IM instruction set, just for fun.
 The performance is 1.821 DMIPS/MHz and 3.120 Coremark/MHz.
 This is not a RISC-V core available for production.
 
+## Development Log
+
+[Development Log Link](https://github.com/StevenChou499/srv32/blob/devel/Development%20Log.md)
+
 ## Features
 
 1.  Three-stage pipeline processor
